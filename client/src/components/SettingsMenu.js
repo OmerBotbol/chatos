@@ -1,45 +1,49 @@
-import React, { useRef, useState } from "react";
-import "../style/SettingsMenu.css";
-import { postHttp, putHttp } from "../utils/httpRequests";
-import { eraseCookie } from "../utils/cookies";
+import React, { useRef, useState } from 'react';
+import '../style/SettingsMenu.css';
+import { postHttp, putHttp } from '../utils/httpRequests';
+import { eraseCookie } from '../utils/cookies';
 
 function SettingsMenu({ user, openSettingsMenu, settingsMenu }) {
-  const [chatIdToJoin, setChatIdToJoin] = useState("");
-  const [messageToUser, setMessageToUser] = useState("");
+  const [chatIdToJoin, setChatIdToJoin] = useState('');
+  const [messageToUser, setMessageToUser] = useState('');
   const chatName = useRef();
 
   const createChat = () => {
     if (chatName.current.length > 0) {
-      postHttp("/api/chat/create", {name: chatName.current, userId = user.id})
-        .then(() => {
-          alert(
-            `to join this chat, enter this url: ${window.location.href}join?chatid=${newId}`
-          );
-          openSettingsMenu(false);
-          chatName.current = "";
-        });
+      postHttp('/api/chat/create', {
+        name: chatName.current,
+        userId: user.id,
+      }).then((result) => {
+        alert(
+          `to join this chat, enter this url: ${window.location.href}join?chatid=${result.chatId}`
+        );
+        openSettingsMenu(false);
+        chatName.current = '';
+      });
     } else {
-      setMessageToUser("Please enter name for the chat");
+      setMessageToUser('Please enter name for the chat');
     }
   };
 
   const joinToChat = () => {
     if (chatIdToJoin.length > 0) {
-      putHttp("/api/chat/add",{chadId: chatIdToJoin, userId: user.id}).then(()=>{
-        openSettingsMenu(false);
-      })
+      putHttp('/api/chat/add', { chadId: chatIdToJoin, userId: user.id }).then(
+        () => {
+          openSettingsMenu(false);
+        }
+      );
     } else {
-      setMessageToUser("Please enter chat ID");
+      setMessageToUser('Please enter chat ID');
     }
   };
 
   const logout = () => {
-    eraseCookie("accessToken")
-    eraseCookie("refreshToken")
-  }
+    eraseCookie('accessToken');
+    eraseCookie('refreshToken');
+  };
 
   return (
-    <div id="settings-menu" className={settingsMenu ? "open" : "close"}>
+    <div id="settings-menu" className={settingsMenu ? 'open' : 'close'}>
       <div id="settings-menu-header">
         <h3>Settings</h3>
         <button

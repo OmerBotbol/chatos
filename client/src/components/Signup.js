@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router';
 import axios from 'axios';
-import { createCookie } from '../utils/cookies';
 
 function Signup({ setUser }) {
   const [email, setEmail] = useState('');

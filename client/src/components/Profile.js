@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ChatList from './ChatList';
 import ChatsWindow from './ChatsWindow';
 import '../style/Profile.css';
 import SettingsMenu from './SettingsMenu';
-import axios from 'axios';
 import { getHttp } from '../utils/httpRequests';
 
 function Profile({ user }) {
@@ -23,7 +22,7 @@ function Profile({ user }) {
   return (
     <div id="profile">
       <div id="container">
-        {userProfileImage && (
+        {user && (
           <ChatList
             user={user}
             currentChatId={currentChatId}

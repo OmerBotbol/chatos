@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import firebase from 'firebase';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import '../style/ChatList.css';
 import { getHttp } from '../utils/httpRequests';
 
-function ChatList({
-  user,
-  sourceImage,
-  currentChatId,
-  openSettingsMenu,
-  openChatWindow,
-}) {
+function ChatList({ user, currentChatId, openSettingsMenu, openChatWindow }) {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
@@ -22,7 +14,7 @@ function ChatList({
   return (
     <ul id="chat-list">
       <div id="chat-list-header">
-        <img id="profile-image" src={sourceImage} alt="profile" />
+        <img id="profile-image" src={user.image} alt="profile" />
         <h3 id="username">{user.displayName}</h3>
         <button
           id="chat-manager-btn"

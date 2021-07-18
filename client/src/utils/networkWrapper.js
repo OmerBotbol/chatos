@@ -10,7 +10,7 @@ const intercept = () => {
         const accessToken = readCookie('accessToken');
         if (!accessToken) {
           return axios
-            .post('/api/refreshToken', {
+            .post('/api/user/refreshToken', {
               refreshToken: refreshToken,
             })
             .then((data) => {
