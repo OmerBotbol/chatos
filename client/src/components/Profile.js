@@ -1,39 +1,31 @@
-import React, { useState } from "react";
-import firebase from "firebase";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import ChatList from "./ChatList";
-import ChatsWindow from "./ChatsWindow";
-import "../style/Profile.css";
-import SettingsMenu from "./SettingsMenu";
+import React, { useEffect, useState } from 'react';
+import ChatList from './ChatList';
+import ChatsWindow from './ChatsWindow';
+import '../style/Profile.css';
+import SettingsMenu from './SettingsMenu';
+import axios from 'axios';
+import { getHttp } from '../utils/httpRequests';
 
 function Profile({ user }) {
-  const fireStore = firebase.firestore();
-  const refMessages = fireStore.collection("messages");
-  const refUsers = fireStore.collection("users");
-  const [currentChatId, setCurrentChatId] = useState("");
-  const [currentChatName, setCurrentChatName] = useState("");
+  const [currentChatId, setCurrentChatId] = useState('');
+  const [currentChatName, setCurrentChatName] = useState('');
   const [settingsMenu, openSettingsMenu] = useState(false);
-
-  const [chatMessages] = useCollectionData(
-    refMessages.where("chatId", "==", currentChatId).orderBy("createdAt")
-  );
-
-  const [userProfile] = useCollectionData(
-    refUsers.where("uid", "==", user.uid)
-  );
+  const [chatMessages, setChatMessages] = useState([]);
 
   const openChatWindow = (chat) => {
     setCurrentChatId(chat.id);
     setCurrentChatName(chat.name);
+    getHttp(`/api/massage?chatId=${chat.id}`, 'accessToken').then((result) => {
+      setChatMessages(result.data);
+    });
   };
 
   return (
     <div id="profile">
       <div id="container">
-        {userProfile && (
+        {userProfileImage && (
           <ChatList
             user={user}
-            sourceImage={userProfile[0].imageUrl}
             currentChatId={currentChatId}
             openSettingsMenu={openSettingsMenu}
             openChatWindow={openChatWindow}
@@ -44,7 +36,6 @@ function Profile({ user }) {
             header={currentChatName}
             currentChatId={currentChatId}
             chatMessages={chatMessages}
-            sourceImage={userProfile[0].imageUrl}
             user={user}
             settingsMenu={settingsMenu}
           />

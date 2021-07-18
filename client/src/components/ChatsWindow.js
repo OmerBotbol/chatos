@@ -1,39 +1,32 @@
-import React, { useState, useRef, useEffect } from "react";
-import ChatMessage from "./ChatMessage";
-import firebase from "firebase";
-import "../style/ChatWindow.css";
+import React, { useState, useRef, useEffect } from 'react';
+import ChatMessage from './ChatMessage';
+import '../style/ChatWindow.css';
+import { postHttp } from '../utils/httpRequests';
 
 function ChatsWindow({
   chatMessages,
-  sourceImage,
   header,
   user,
   currentChatId,
   settingsMenu,
 }) {
-  const fireStore = firebase.firestore();
-  const refMessages = fireStore.collection("messages");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const divRef = useRef(null);
 
   useEffect(() => {
-    divRef.current.scrollIntoView({ behavior: "smooth" });
+    divRef.current.scrollIntoView({ behavior: 'smooth' });
   });
 
-  const sendMessage = (event) => {
-    refMessages
-      .add({
-        chatId: currentChatId,
-        content: content,
-        createdAt: firebase.firestore.Timestamp.now(),
-        userId: user.uid,
-        userName: user.displayName,
-        userImage: sourceImage,
-      })
-      .then(() => {
-        setContent("");
-        event.target.parentNode.children[0].value = "";
-      });
+  const sendMessage = () => {
+    const dataToSend = {
+      chatId: currentChatId,
+      content: content,
+      userId: user.id,
+      username: user.username,
+    };
+    postHttp('/api/message', dataToSend).then(() => {
+      setContent('');
+    });
   };
 
   const generate = () => {
@@ -41,7 +34,7 @@ function ChatsWindow({
   };
 
   return (
-    <div id="chat-window" className={settingsMenu ? "shadow-theme" : ""}>
+    <div id="chat-window" className={settingsMenu ? 'shadow-theme' : ''}>
       <div id="chat-header">
         <h3>{header}</h3>
         <div>{`chat ID: ${currentChatId}`}</div>
@@ -59,6 +52,7 @@ function ChatsWindow({
         <input
           id="message-input"
           type="text"
+          value={content}
           onChange={(e) => setContent(e.target.value)}
         />
         <button id="send-btn" onClick={(e) => sendMessage(e)}>

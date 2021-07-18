@@ -1,50 +1,19 @@
-import React, { useState } from "react";
-import firebase from "firebase";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import "../style/HomePage.css";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import '../style/HomePage.css';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { createCookie } from '../utils/cookies';
 
-function HomePage() {
-  const fireStore = firebase.firestore();
-  const userRef = fireStore.collection("users");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [users] = useCollectionData(userRef);
-
-  const createUser = (user) => {
-    const usersId = users.map((userData) => userData.uid);
-    if (!usersId.includes(user.uid)) {
-      userRef.doc(user.uid).set({
-        imageUrl: user.photoURL,
-        uid: user.uid,
-        userName: user.displayName,
-      });
-    }
-  };
+function HomePage({ setUser }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const loginWithEmailAndPassword = () => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
-      });
-  };
-
-  const loginWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(({ user }) => createUser(user));
-  };
-
-  const loginWithFacebook = () => {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(({ user }) => createUser(user));
+    axios.post('/api/user/login', { email, password }).then((result) => {
+      setUser(result.data.user);
+      createCookie('accessToken', result.data.accessToken, 900000);
+      createCookie('refreshToken', result.data.refreshToken);
+    });
   };
 
   return (
@@ -65,17 +34,6 @@ function HomePage() {
         </form>
       </div>
       <div id="login-buttons">
-        <button className="login-btn" onClick={() => loginWithGoogle()}>
-          login with google
-        </button>
-        <button
-          className="login-btn"
-          onClick={() => {
-            loginWithFacebook();
-          }}
-        >
-          login with facebook
-        </button>
         <Link to="/signup">Sign-up here</Link>
       </div>
     </div>

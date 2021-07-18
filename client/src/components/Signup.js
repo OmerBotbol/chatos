@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router';
-import { v4 as uuid } from 'uuid';
 import axios from 'axios';
+import { createCookie } from '../utils/cookies';
 
 function Signup({ setUser }) {
   const [email, setEmail] = useState('');
@@ -10,12 +10,9 @@ function Signup({ setUser }) {
   const [finished, setFinished] = useState(false);
 
   const signupWithEmailAndPassword = () => {
-    axios
-      .post('/api/user/create', { username, password, email, uid: uuid() })
-      .then(() => {
-        setUser({ username, uid });
-        setFinished((prev) => !prev);
-      });
+    axios.post('/api/user/create', { username, password, email }).then(() => {
+      setFinished((prev) => !prev);
+    });
   };
 
   return (

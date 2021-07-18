@@ -12,14 +12,14 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          {user ? <Profile user={user} /> : <HomePage />}
+          {user ? <Profile user={user} /> : <HomePage setUser={setUser} />}
         </Route>
         <Route exact path="/signup">
           <Signup setUser={setUser} />
         </Route>
         {user && (
           <Route path="/join">
-            <JoinChat userId={user.uid} />
+            <JoinChat userId={user.id} />
           </Route>
         )}
       </Switch>

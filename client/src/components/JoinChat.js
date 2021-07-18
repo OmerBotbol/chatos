@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
+import { putHttp } from '../utils/httpRequests';
 
 function JoinChat({ userId }) {
   function useQuery() {
@@ -8,21 +9,19 @@ function JoinChat({ userId }) {
 
   const query = useQuery();
   const chatId = query.get('chatid');
-  const [chatUsers, setChatUsers] = useState({});
   const [messageToUser, setMessageToUser] = useState('you will redirect soon');
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {
-    if (chatUsers && !finished) {
-      setFinished(true);
-      const isExist = chatUsers[0].users.includes(userId);
-      if (!isExist) {
-        refChats.doc(chatId).update({ users: [...chatUsers[0].users, userId] });
-      } else {
-        setMessageToUser('You are already in this chat');
-      }
-    }
-  }, [chatUsers, chatId, finished, refChats, userId]);
+    putHttp('/api/chat/join', { chatId, userId })
+      .then(() => {
+        setFinished((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+        setMessageToUser('we had a problem, please try again later');
+      });
+  }, [, chatId, finished, userId]);
 
   return <>{finished ? <Redirect to="/" /> : <div>{messageToUser}</div>}</>;
 }

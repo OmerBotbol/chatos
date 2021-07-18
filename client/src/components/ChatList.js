@@ -1,7 +1,8 @@
-import React from "react";
-import firebase from "firebase";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import "../style/ChatList.css";
+import React, { useEffect, useState } from 'react';
+import firebase from 'firebase';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import '../style/ChatList.css';
+import { getHttp } from '../utils/httpRequests';
 
 function ChatList({
   user,
@@ -10,11 +11,13 @@ function ChatList({
   openSettingsMenu,
   openChatWindow,
 }) {
-  const fireStore = firebase.firestore();
-  const refChats = fireStore.collection("chat rooms");
-  const [chats] = useCollectionData(
-    refChats.where("users", "array-contains", user.uid)
-  );
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    getHttp(`/api/chat?userId=${user.id}`).then((result) => {
+      setChats(result.data);
+    });
+  });
 
   return (
     <ul id="chat-list">
@@ -32,7 +35,7 @@ function ChatList({
         return (
           <li
             key={i}
-            className={currentChatId === chat.id ? "current chat" : "chat"}
+            className={currentChatId === chat.id ? 'current chat' : 'chat'}
             onClick={() => openChatWindow(chat)}
           >
             {chat.name}
