@@ -3,7 +3,7 @@ import '../style/SettingsMenu.css';
 import { postHttp, putHttp } from '../utils/httpRequests';
 import { eraseCookie } from '../utils/cookies';
 
-function SettingsMenu({ user, openSettingsMenu, settingsMenu }) {
+function SettingsMenu({ user, openSettingsMenu, settingsMenu, setChats }) {
   const [chatIdToJoin, setChatIdToJoin] = useState('');
   const [messageToUser, setMessageToUser] = useState('');
   const chatName = useRef();
@@ -14,8 +14,12 @@ function SettingsMenu({ user, openSettingsMenu, settingsMenu }) {
         name: chatName.current,
         userId: user.id,
       }).then((result) => {
+        setChats((prev) => [
+          ...prev,
+          { name: chatName.current, id: result.data.chatId },
+        ]);
         alert(
-          `to join this chat, enter this url: ${window.location.href}join?chatid=${result.chatId}`
+          `to join this chat, enter this url: ${window.location.href}join?chatid=${result.data.chatId}`
         );
         openSettingsMenu(false);
         chatName.current = '';
@@ -27,7 +31,7 @@ function SettingsMenu({ user, openSettingsMenu, settingsMenu }) {
 
   const joinToChat = () => {
     if (chatIdToJoin.length > 0) {
-      putHttp('/api/chat/add', { chadId: chatIdToJoin, userId: user.id }).then(
+      putHttp('/api/chat/join', { chadId: chatIdToJoin, userId: user.id }).then(
         () => {
           openSettingsMenu(false);
         }

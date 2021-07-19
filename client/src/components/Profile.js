@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatList from './ChatList';
 import ChatsWindow from './ChatsWindow';
 import '../style/Profile.css';
@@ -10,6 +10,13 @@ function Profile({ user }) {
   const [currentChatName, setCurrentChatName] = useState('');
   const [settingsMenu, openSettingsMenu] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    getHttp(`/api/chat?user_id=${user.id}`).then((result) => {
+      setChats(result.data);
+    });
+  }, [user.id]);
 
   const openChatWindow = (chat) => {
     setCurrentChatId(chat.id);
@@ -25,6 +32,7 @@ function Profile({ user }) {
         {user && (
           <ChatList
             user={user}
+            chats={chats}
             currentChatId={currentChatId}
             openSettingsMenu={openSettingsMenu}
             openChatWindow={openChatWindow}
@@ -44,6 +52,7 @@ function Profile({ user }) {
         user={user}
         openSettingsMenu={openSettingsMenu}
         settingsMenu={settingsMenu}
+        setChats={setChats}
       />
     </div>
   );

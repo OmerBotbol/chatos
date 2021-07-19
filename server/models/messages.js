@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   Messages.init(
     {
       content: DataTypes.STRING,
-      userId: DataTypes.INTEGER,
-      chatId: DataTypes.INTEGER,
+      user_id: DataTypes.INTEGER,
+      chat_id: DataTypes.INTEGER,
       username: DataTypes.STRING,
     },
     {
