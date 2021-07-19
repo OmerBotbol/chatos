@@ -4,6 +4,8 @@ import ChatsWindow from './ChatsWindow';
 import '../style/Profile.css';
 import SettingsMenu from './SettingsMenu';
 import { getHttp } from '../utils/httpRequests';
+import { io } from 'socket.io-client';
+const SERVER = 'http://127.0.0.1:5000';
 
 function Profile({ user }) {
   const [currentChatId, setCurrentChatId] = useState('');
@@ -11,6 +13,11 @@ function Profile({ user }) {
   const [settingsMenu, openSettingsMenu] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chats, setChats] = useState([]);
+  const socket = io(SERVER);
+
+  socket.on('get-messages', (messages) => {
+    setChatMessages(messages);
+  });
 
   useEffect(() => {
     getHttp(`/api/chat?user_id=${user.id}`).then((result) => {
@@ -21,9 +28,7 @@ function Profile({ user }) {
   const openChatWindow = (chat) => {
     setCurrentChatId(chat.id);
     setCurrentChatName(chat.name);
-    getHttp(`/api/massage?chatId=${chat.id}`, 'accessToken').then((result) => {
-      setChatMessages(result.data);
-    });
+    socket.emit('join-chat', chat.id);
   };
 
   return (
@@ -45,6 +50,7 @@ function Profile({ user }) {
             chatMessages={chatMessages}
             user={user}
             settingsMenu={settingsMenu}
+            socket={socket}
           />
         )}
       </div>

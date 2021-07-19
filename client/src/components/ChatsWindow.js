@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import '../style/ChatWindow.css';
-import { postHttp } from '../utils/httpRequests';
 
 function ChatsWindow({
   chatMessages,
@@ -9,6 +8,7 @@ function ChatsWindow({
   user,
   currentChatId,
   settingsMenu,
+  socket,
 }) {
   const [content, setContent] = useState('');
   const divRef = useRef(null);
@@ -19,14 +19,13 @@ function ChatsWindow({
 
   const sendMessage = () => {
     const dataToSend = {
-      chatId: currentChatId,
+      chat_id: currentChatId,
       content: content,
-      userId: user.id,
+      user_id: user.id,
       username: user.username,
     };
-    postHttp('/api/message', dataToSend).then(() => {
-      setContent('');
-    });
+    socket.emit('send-message', dataToSend);
+    setContent('');
   };
 
   const generate = () => {
@@ -44,7 +43,7 @@ function ChatsWindow({
       </div>
       <div id="chat-content">
         {chatMessages?.map((data, i) => {
-          return <ChatMessage data={data} key={i} userId={user.uid} />;
+          return <ChatMessage data={data} key={i} userId={user.id} />;
         })}
         <div ref={divRef} />
       </div>

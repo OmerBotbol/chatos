@@ -60,7 +60,8 @@ const joinToChat = async (req, res) => {
       user_id: userId,
       chat_id: chatId,
     });
-    res.status(200).send('you join the chat room successfully');
+    const chatData = await models.Chats.findOne({ where: { id: chatId } });
+    res.status(200).send(chatData);
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);

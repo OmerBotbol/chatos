@@ -31,8 +31,9 @@ function SettingsMenu({ user, openSettingsMenu, settingsMenu, setChats }) {
 
   const joinToChat = () => {
     if (chatIdToJoin.length > 0) {
-      putHttp('/api/chat/join', { chadId: chatIdToJoin, userId: user.id }).then(
-        () => {
+      putHttp('/api/chat/join', { chatId: chatIdToJoin, userId: user.id }).then(
+        (result) => {
+          setChats((prev) => [...prev, result.data]);
           openSettingsMenu(false);
         }
       );

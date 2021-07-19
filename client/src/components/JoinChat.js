@@ -21,7 +21,7 @@ function JoinChat({ userId }) {
         console.log(err);
         setMessageToUser('we had a problem, please try again later');
       });
-  }, [chatId, finished, userId]);
+  }, [chatId, userId]);
 
   return <>{finished ? <Redirect to="/" /> : <div>{messageToUser}</div>}</>;
 }
