@@ -1,6 +1,7 @@
+require('dotenv').config();
 const app = require('express')();
 const http = require('http').createServer(app);
-const PORT = 5000;
+const PORT = process.env.CHAT_PORT || 5000;
 const io = require('socket.io')(http, {
   cors: {
     origin: 'http://localhost:3000',
