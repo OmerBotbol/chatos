@@ -18,6 +18,7 @@ function ChatsWindow({
   });
 
   const sendMessage = () => {
+    if (!content) return;
     const dataToSend = {
       chat_id: currentChatId,
       content: content,

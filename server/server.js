@@ -16,6 +16,7 @@ http.listen(PORT, () => {
 
 io.on('connection', (socket) => {
   socket.on('join-chat', (chatId) => {
+    socket.join(chatId);
     getMessagesByChatId(chatId)
       .then((result) => {
         socket.emit(result[0], result[1]);
@@ -29,7 +30,7 @@ io.on('connection', (socket) => {
     models.Messages.create(message).then(() => {
       getMessagesByChatId(message.chat_id)
         .then((result) => {
-          socket.broadcast.emit(result[0], result[1]);
+          socket.broadcast.to(message.chat_id).emit(result[0], result[1]);
         })
         .catch((err) => {
           socket.broadcast.emit('error', err.message);
