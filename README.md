@@ -24,9 +24,11 @@ After I finished Cyber4s course as FullStack developer, I've decided to turn my 
    - PORT= **not 3000**
    - CHAT_PORT= **not 3000**
    - DB_PASSWORD= ""
-   - DATABASE= ""
-   - REFRESH_TOKEN= ""
+   - DATABASE= "" (Database name in MySQL)
+   - REFRESH_TOKEN= "" 
    - ACCESS_TOKEN= ""
+   - ID= "" (Access key ID from AWS)
+   - SECRET= "" (Secret access key FROM aws)
 
 5. Install project dependencies by running `npm i` in the server & client folders
 6. Open new terminal, Go to the server folder and run `npm db` and then `npm start`
