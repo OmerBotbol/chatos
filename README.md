@@ -2,7 +2,7 @@
 
 ## Introduction
 
-After I finished Cyber4s course as FullStack developer, I've decided to turn my Firebase [chat app](https://github.com/OmerBotbol/chat-app) to independent app based on React in client-side and Nodejs in server-side. I changed Firebase authentication to JWT authentication, Firebase database to MySQL database, Firebase storage to AWS S3 storage and finally, my main goal, use socket.io to create live chat!
+After I finished Cyber4s course as FullStack developer, I've decided to turn my Firebase [chat app](https://github.com/OmerBotbol/chat-app) to an independent app based on React in client-side and Nodejs in server-side. I changed Firebase authentication to JWT authentication, Firebase database to MySQL database, Firebase storage to AWS S3 storage and finally, my main goal, use socket.io to create live chat!
 
 ## Technologies
 
