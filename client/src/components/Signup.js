@@ -8,10 +8,15 @@ function Signup({ setUser }) {
   const [username, setUsername] = useState('');
   const [finished, setFinished] = useState(false);
 
-  const signupWithEmailAndPassword = () => {
-    axios.post('/api/user/create', { username, password, email }).then(() => {
-      setFinished((prev) => !prev);
+  const signupWithEmailAndPassword = async () => {
+    await axios.post('/api/user/create', {
+      username,
+      password,
+      email,
+      image:
+        'https://chatos-images.s3.amazonaws.com/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg',
     });
+    setFinished((prev) => !prev);
   };
 
   return (

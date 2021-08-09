@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const models = require('../models');
 
 const createUser = async (req, res) => {
-  const { username, email, password, image } = req.body;
+  const { username, email, password } = req.body;
   const reg = '[a-zA-Z0-9]$';
   if (
     email === '' ||
@@ -19,7 +19,6 @@ const createUser = async (req, res) => {
     username,
     email,
     password: hashedPassword,
-    image,
   }).then(() => {
     res.status(201).json({
       email,
@@ -37,14 +36,14 @@ const login = async (req, res) => {
   if (!isPasswordCorrect)
     return res.status(403).json({ error: 'Incorrect password' });
   const accessToken = jwt.sign(
-    { id: userData.id, username: userData.username, image: userData.image },
+    { id: userData.id, username: userData.username },
     process.env.ACCESS_TOKEN,
     {
       expiresIn: '15m',
     }
   );
   const refreshToken = jwt.sign(
-    { id: userData.id, username: userData.username, image: userData.image },
+    { id: userData.id, username: userData.username },
     process.env.REFRESH_TOKEN,
     {
       expiresIn: '7d',
@@ -56,7 +55,6 @@ const login = async (req, res) => {
     user: {
       id: userData.id,
       username: userData.username,
-      image: userData.image,
     },
   });
 };
@@ -82,7 +80,6 @@ const updateAccessToken = (req, res) => {
       accessToken: newAccessToken,
       id: decoded.id,
       username: decoded.username,
-      image: decoded.image,
     });
   });
 };

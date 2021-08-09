@@ -3,9 +3,16 @@ import '../style/SettingsMenu.css';
 import { postHttp, putHttp } from '../utils/httpRequests';
 import { eraseCookie } from '../utils/cookies';
 
-function SettingsMenu({ user, openSettingsMenu, settingsMenu, setChats }) {
+function SettingsMenu({
+  user,
+  openSettingsMenu,
+  settingsMenu,
+  setChats,
+  setUserImage,
+}) {
   const [chatIdToJoin, setChatIdToJoin] = useState('');
   const [messageToUser, setMessageToUser] = useState('');
+  const [image, setImage] = useState('');
   const chatName = useRef();
 
   const createChat = () => {
@@ -42,6 +49,15 @@ function SettingsMenu({ user, openSettingsMenu, settingsMenu, setChats }) {
     }
   };
 
+  const uploadImage = () => {
+    const imageInForm = new FormData();
+    imageInForm.append('file', image);
+    putHttp(`/api/image/upload/${user.id}`, imageInForm).then((imageUrl) => {
+      setUserImage(imageUrl.data);
+      openSettingsMenu(false);
+    });
+  };
+
   const logout = () => {
     eraseCookie('accessToken');
     eraseCookie('refreshToken');
@@ -76,6 +92,15 @@ function SettingsMenu({ user, openSettingsMenu, settingsMenu, setChats }) {
             onChange={(e) => setChatIdToJoin(e.target.value)}
           />
           <button onClick={() => joinToChat()}>Join</button>
+        </section>
+        <section>
+          <input
+            className="input-file"
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+          <button onClick={() => uploadImage()}>Upload</button>
         </section>
       </div>
       <button id="logout-btn" onClick={() => logout()}>

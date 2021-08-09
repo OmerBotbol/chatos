@@ -3,6 +3,7 @@ import '../style/ChatList.css';
 function ChatList({
   user,
   currentChatId,
+  userImage,
   openSettingsMenu,
   openChatWindow,
   chats,
@@ -10,7 +11,7 @@ function ChatList({
   return (
     <ul id="chat-list">
       <div id="chat-list-header">
-        <img id="profile-image" src={user.image} alt="profile" />
+        <img id="profile-image" src={userImage} alt="profile" />
         <h3 id="username">{user.username}</h3>
         <button
           id="chat-manager-btn"

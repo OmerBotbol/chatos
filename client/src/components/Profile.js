@@ -11,6 +11,7 @@ function Profile({ user }) {
   const [currentChatId, setCurrentChatId] = useState('');
   const [currentChatName, setCurrentChatName] = useState('');
   const [settingsMenu, openSettingsMenu] = useState(false);
+  const [userImage, setUserImage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
   const [chats, setChats] = useState([]);
   const socket = io(SERVER);
@@ -24,6 +25,12 @@ function Profile({ user }) {
       setChats(result.data);
     });
   }, [user.id]);
+
+  useEffect(() => {
+    getHttp(`/api/image/${user.id}`).then((result) => {
+      setUserImage(result.data);
+    });
+  });
 
   const openChatWindow = (chat) => {
     setCurrentChatId(chat.id);
@@ -39,6 +46,7 @@ function Profile({ user }) {
             user={user}
             chats={chats}
             currentChatId={currentChatId}
+            userImage={userImage}
             openSettingsMenu={openSettingsMenu}
             openChatWindow={openChatWindow}
           />
@@ -59,6 +67,7 @@ function Profile({ user }) {
         openSettingsMenu={openSettingsMenu}
         settingsMenu={settingsMenu}
         setChats={setChats}
+        setUserImage={setUserImage}
       />
     </div>
   );
