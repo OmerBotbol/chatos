@@ -29,7 +29,7 @@ After I finished Cyber4s course as FullStack developer, I've decided to turn my 
    - ACCESS_TOKEN= ""
    - ID= "" (Access key ID from AWS)
    - SECRET= "" (Secret access key from AWS)
-   - BUCKET_NAME= "" (Bucket name in AWS)
+   - BUCKET_NAME= "" (Bucket name in S3)
 
 5. Install project dependencies by running `npm i` in the server & client folders
 6. Open new terminal, Go to the server folder and run `npm db` and then `npm start`
